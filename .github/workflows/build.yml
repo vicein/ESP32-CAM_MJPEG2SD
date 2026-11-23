@@ -12,15 +12,15 @@ jobs:
 
       - name: Install Arduino CLI & ESP32 Core
         run: |
-          curl -fsSL https://githubusercontent.com | sh
-          export PATH=$PATH:$PWD/bin
-          ESP_URL="https://github.io"
+          brew install arduino-cli
+          H="espressif.github.io"
+          P="arduino-esp32/package_esp32_index.json"
+          ESP_URL="https://${H}/${P}"
           arduino-cli core update-index --additional-urls "$ESP_URL"
           arduino-cli core install esp32:esp32@3.1.1 --additional-urls "$ESP_URL"
 
       - name: Compile Sketch
         run: |
-          export PATH=$PATH:$PWD/bin
           mkdir -p build
           arduino-cli compile \
             --fqbn esp32:esp32:esp32cam:PartitionScheme=min_spiffs \
