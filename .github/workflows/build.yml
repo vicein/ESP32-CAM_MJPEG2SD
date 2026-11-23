@@ -6,13 +6,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Install Arduino CLI & ESP32 Core
         run: |
-          brew install arduino-cli
+          gh release download -R arduino/arduino-cli -p "*Linux_64bit.tar.gz"
+          tar -xzf arduino-cli_*_Linux_64bit.tar.gz
+          sudo mv arduino-cli /usr/local/bin/
           H="espressif.github.io"
           P="arduino-esp32/package_esp32_index.json"
           ESP_URL="https://${H}/${P}"
