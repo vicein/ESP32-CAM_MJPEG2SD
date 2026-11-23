@@ -10,18 +10,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Arduino CLI
-        uses: arduino/setup-arduino-cli@v2
-
-      - name: Install ESP32 Core
+      - name: Install Arduino CLI & ESP32 Core
         run: |
-          arduino-cli config init
-          arduino-cli config add board_manager.additional_urls https://github.io
-          arduino-cli core update-index
-          arduino-cli core install esp32:esp32@3.1.1
+          curl -fsSL https://githubusercontent.com | sh
+          export PATH=$PATH:$PWD/bin
+          ESP_URL="https://github.io"
+          arduino-cli core update-index --additional-urls "$ESP_URL"
+          arduino-cli core install esp32:esp32@3.1.1 --additional-urls "$ESP_URL"
 
       - name: Compile Sketch
         run: |
+          export PATH=$PATH:$PWD/bin
           mkdir -p build
           arduino-cli compile \
             --fqbn esp32:esp32:esp32cam:PartitionScheme=min_spiffs \
